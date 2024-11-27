@@ -9,6 +9,10 @@ const calculate = (btnValue) => {
   if (btnValue === "=" && output !== "") {
     //If output has '%', replace with '/100' before evaluating.
     output = eval(output.replace("%", "/100"));
+
+    // add history
+
+
   } else if (btnValue === "AC") {
     output = "";
   } else if (btnValue === "DEL") {
@@ -27,3 +31,12 @@ buttons.forEach((button) => {
   //Button click listener calls calculate() with dataset value as argument.
   button.addEventListener("click", (e) => calculate(e.target.dataset.value));
 });
+
+// function addElement() {
+//     document.getElementById("history")
+//                 .innerHTML +=
+//                 `<h3>
+//                     This is the text which has
+//                     been inserted by JS
+//                 </h3>`;
+// }
