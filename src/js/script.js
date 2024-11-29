@@ -39,7 +39,11 @@ function addElement() {
   const node = document.createTextNode("This is new.");
   para.appendChild(node);
 
+  const button = document.createElement("button");
+  button.textContent = "Click me";
+
   const element = document.getElementById("history");
   const child = document.getElementById("p1");
-  element.insertBefore(para,child);
+  element.insertBefore(button, child);
+  element.insertBefore(para, button.nextSibling);
 }
