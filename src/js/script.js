@@ -40,7 +40,8 @@ function addElement() {
   para.appendChild(node);
 
   const button = document.createElement("button");
-  button.textContent = "Click me";
+  button.textContent = "X";
+  button.className = "hist_button";
 
   const element = document.getElementById("history");
   const child = document.getElementById("p1");
