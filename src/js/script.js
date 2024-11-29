@@ -32,11 +32,14 @@ buttons.forEach((button) => {
   button.addEventListener("click", (e) => calculate(e.target.dataset.value));
 });
 
-// function addElement() {
-//     document.getElementById("history")
-//                 .innerHTML +=
-//                 `<h3>
-//                     This is the text which has
-//                     been inserted by JS
-//                 </h3>`;
-// }
+function addElement() {
+  const para = document.createElement("p");
+  para.className = "hist_record";
+  para.setAttribute("id", "record");
+  const node = document.createTextNode("This is new.");
+  para.appendChild(node);
+
+  const element = document.getElementById("history");
+  const child = document.getElementById("p1");
+  element.insertBefore(para,child);
+}
