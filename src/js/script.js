@@ -1,6 +1,7 @@
 const display = document.querySelector(".display");
-const buttons = document.querySelectorAll("button");
+const buttons = document.querySelectorAll("button"); // Select all buttons
 const historyField = document.getElementById("history");
+const toggleHistoryButton = document.getElementById("toggle-history");
 const specialChars = ["%", "*", "/", "-", "+", "="];
 let output = "";
 
@@ -10,53 +11,59 @@ const loadHistory = () => {
   history.forEach(addToHistoryDisplay);
 };
 
-// Load history from localStorage when the page is opened
+// Load history on page load
 document.addEventListener("DOMContentLoaded", loadHistory);
 
-// Function for calculation depending on buttons
+// Show/Hide history functionality
+toggleHistoryButton.addEventListener("click", () => {
+  const isHidden = historyField.style.display === "none";
+  historyField.style.display = isHidden ? "block" : "none";
+  toggleHistoryButton.textContent = isHidden ? "Hide History" : "Show History";
+});
+
+// Calculator logic
 const calculate = (btnValue) => {
   display.focus();
   if (btnValue === "=" && output !== "") {
     try {
-      // If there is '%' in calculation, replace it with /100
       const result = eval(output.replace("%", "/100"));
       const example = `${output} = ${result}`;
-      addToHistory(example);    // add calculation to history
+      addToHistory(example);
       output = result.toString();
     } catch (error) {
-      alert("Error in expression!");
+      alert("Invalid Expression");
     }
   } else if (btnValue === "AC") {
     output = "";
   } else if (btnValue === "DEL") {
     output = output.toString().slice(0, -1);
   } else {
-    // If output is empty и and special key is pressed, do nothing
     if (output === "" && specialChars.includes(btnValue)) return;
     output += btnValue;
   }
   display.value = output;
 };
 
-// Add event listener for buttons
+// Add event listeners to all buttons
 buttons.forEach((button) => {
-  button.addEventListener("click", (e) => calculate(e.target.dataset.value));
+  button.addEventListener("click", (e) => {
+    const btnValue = e.target.dataset.value; // Get the data-value attribute
+    if (btnValue !== undefined) {
+      // Only process buttons with data-value
+      calculate(btnValue);
+    }
+  });
 });
 
-// Save equation to history
+// Save calculation to history
 const addToHistory = (example) => {
-  // Get existing history from localStorage
   const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
-  // add new calculation
   history.push(example);
-  // save updated history to localStorage
   localStorage.setItem("calcHistory", JSON.stringify(history));
-  // update history field
   addToHistoryDisplay(example);
 };
 
-
-// show calculations in field
+// Display history item
 const addToHistoryDisplay = (example) => {
   const div = document.createElement("div");
   div.textContent = example;
