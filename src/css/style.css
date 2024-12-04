@@ -57,9 +57,9 @@ body {
 
 .history_field {
   position: absolute;
-  top: 200px; 
+  top: 190px; 
   left: 65%;
-  height: 200px; 
+  height: 540px; 
   width:30%; 
   background-color: #80b7ff; 
   color: #00093a; 
@@ -67,8 +67,4 @@ body {
   padding: 10px; 
   border-radius: 8px;
   overflow-y: auto; 
-
-  margin-bottom: 10px; 
-
-
 }
