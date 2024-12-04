@@ -1,50 +1,64 @@
 const display = document.querySelector(".display");
 const buttons = document.querySelectorAll("button");
+const historyField = document.getElementById("history");
 const specialChars = ["%", "*", "/", "-", "+", "="];
 let output = "";
 
-//Define function to calculate based on button clicked.
+// Load history from localStorage
+const loadHistory = () => {
+  const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
+  history.forEach(addToHistoryDisplay);
+};
+
+// Load history from localStorage when the page is opened
+document.addEventListener("DOMContentLoaded", loadHistory);
+
+// Function for calculation depending on buttons
 const calculate = (btnValue) => {
   display.focus();
   if (btnValue === "=" && output !== "") {
-    //If output has '%', replace with '/100' before evaluating.
-    output = eval(output.replace("%", "/100"));
-
-    // add history
-
-
+    try {
+      // If there is '%' in calculation, replace it with /100
+      const result = eval(output.replace("%", "/100"));
+      const example = `${output} = ${result}`;
+      addToHistory(example);    // add calculation to history
+      output = result.toString();
+    } catch (error) {
+      alert("Error in expression!");
+    }
   } else if (btnValue === "AC") {
     output = "";
   } else if (btnValue === "DEL") {
-    //If DEL button is clicked, remove the last character from the output.
     output = output.toString().slice(0, -1);
   } else {
-    //If output is empty and button is specialChars then return
+    // If output is empty и and special key is pressed, do nothing
     if (output === "" && specialChars.includes(btnValue)) return;
     output += btnValue;
   }
   display.value = output;
 };
 
-//Add event listener to buttons, call calculate() on click.
+// Add event listener for buttons
 buttons.forEach((button) => {
-  //Button click listener calls calculate() with dataset value as argument.
   button.addEventListener("click", (e) => calculate(e.target.dataset.value));
 });
 
-function addElement() {
-  const para = document.createElement("p");
-  para.className = "hist_record";
-  para.setAttribute("id", "record");
-  const node = document.createTextNode("This is new.");
-  para.appendChild(node);
+// Save equation to history
+const addToHistory = (example) => {
+  // Get existing history from localStorage
+  const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
+  // add new calculation
+  history.push(example);
+  // save updated history to localStorage
+  localStorage.setItem("calcHistory", JSON.stringify(history));
+  // update history field
+  addToHistoryDisplay(example);
+};
 
-  const button = document.createElement("button");
-  button.textContent = "X";
-  button.className = "hist_button";
 
-  const element = document.getElementById("history");
-  const child = document.getElementById("p1");
-  element.insertBefore(button, child);
-  element.insertBefore(para, button.nextSibling);
-}
+// show calculations in field
+const addToHistoryDisplay = (example) => {
+  const div = document.createElement("div");
+  div.textContent = example;
+  historyField.appendChild(div);
+};
