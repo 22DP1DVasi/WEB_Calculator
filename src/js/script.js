@@ -7,10 +7,18 @@ const specialChars = ["%", "*", "/", "-", "+", "="];
 let output = "";
 
 // Load history from localStorage
+// function loadHistory() {
+//   const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
+//   history.forEach(addToHistoryDisplay);
+// };
+
+// Load history from localStorage
 function loadHistory() {
   const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
-  history.forEach(addToHistoryDisplay);
-};
+  for (let i = history.length - 1; i >= 0; i--) {
+    addToHistoryDisplay(history[i]);
+  }
+}
 
 // Load history on page load
 document.addEventListener("DOMContentLoaded", loadHistory);
@@ -21,6 +29,14 @@ toggleHistoryButton.addEventListener("click", () => {
   historyField.style.display = isHidden ? "block" : "none";
   toggleHistoryButton.textContent = isHidden ? "Hide History" : "Show History";
 });
+
+// Example function to add a new calculation to history
+function addCalculationToHistory(calculation) {
+  const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
+  history.push(calculation);
+  localStorage.setItem("calcHistory", JSON.stringify(history));
+  addToHistoryDisplay(calculation);
+}
 
 // Calculator logic
 const calculate = (btnValue) => {
@@ -64,12 +80,12 @@ function addToHistory(example) {
   addToHistoryDisplay(example);
 };
 
-// Display history item
-function addToHistoryDisplay(example) {
-  const div = document.createElement("div");
-  div.textContent = example;
-  historyRecords.appendChild(div);
-};
+// Add a new history item to the display
+function addToHistoryDisplay(item) {
+  const historyItem = document.createElement("div");
+  historyItem.textContent = item;
+  historyRecords.prepend(historyItem); // Prepend the new item to the top
+}
 
 // function addDeleteHistoryButton() {
 //   const delHistButton = document.createElement("button");
