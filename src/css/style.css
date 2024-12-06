@@ -67,16 +67,20 @@ body {
 }
 
 .history_field {
+  display: flex;
   position: absolute;
-  top: 190px; 
+  top: 8%; 
   left: 65%;
-  height: 540px; 
+  height: 72%; 
   width:30%; 
-  background-color: #80b7ff; 
-  color: #00093a; 
+  background-color: rgb(5, 6, 7); 
+  color: rgb(255, 255, 255);; 
   font-size: 20px; 
   padding: 10px; 
   border-radius: 8px;
   overflow-y: auto; 
   margin-bottom: 10px; 
+  border-style: solid;
+  border-color: #011535;
+  border-width: 13px;
 }
