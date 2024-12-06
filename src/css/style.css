@@ -67,20 +67,30 @@ body {
 }
 
 .history_field {
-  display: flex;
   position: absolute;
   top: 8%; 
   left: 65%;
   height: 72%; 
-  width:30%; 
+  width: 30%; 
   background-color: rgb(5, 6, 7); 
-  color: rgb(255, 255, 255);; 
+  color: rgb(255, 255, 255); 
   font-size: 20px; 
   padding: 10px; 
   border-radius: 8px;
-  overflow-y: auto; 
   margin-bottom: 10px; 
-  border-style: solid;
-  border-color: #011535;
-  border-width: 13px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hist_records {
+  flex: 1;
+  overflow-y: auto;
+  max-height: calc(100% - 50px); /* Adjust this value based on the height of the delete button */
+}
+
+.delete-history {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
 }
