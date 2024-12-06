@@ -1,12 +1,13 @@
 const display = document.querySelector(".display");
 const buttons = document.querySelectorAll("button"); // Select all buttons
 const historyField = document.getElementById("history");
+const historyRecords = document.getElementById("hst_records");
 const toggleHistoryButton = document.getElementById("toggle-history");
 const specialChars = ["%", "*", "/", "-", "+", "="];
 let output = "";
 
 // Load history from localStorage
-const loadHistory = () => {
+function loadHistory() {
   const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
   history.forEach(addToHistoryDisplay);
 };
@@ -56,7 +57,7 @@ buttons.forEach((button) => {
 });
 
 // Save calculation to history
-const addToHistory = (example) => {
+function addToHistory(example) {
   const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
   history.push(example);
   localStorage.setItem("calcHistory", JSON.stringify(history));
@@ -64,8 +65,14 @@ const addToHistory = (example) => {
 };
 
 // Display history item
-const addToHistoryDisplay = (example) => {
+function addToHistoryDisplay(example) {
   const div = document.createElement("div");
   div.textContent = example;
-  historyField.appendChild(div);
+  historyRecords.appendChild(div);
 };
+
+// function addDeleteHistoryButton() {
+//   const delHistButton = document.createElement("button");
+//   delHistButton.textContent = "Delete history";
+
+// }
