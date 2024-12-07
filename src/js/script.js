@@ -7,17 +7,9 @@ const specialChars = ["%", "*", "/", "-", "+", "="];
 let output = "";
 
 // Load history from localStorage
-// function loadHistory() {
-//   const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
-//   history.forEach(addToHistoryDisplay);
-// };
-
-// Load history from localStorage
 function loadHistory() {
   const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
-  for (let i = history.length - 1; i >= 0; i--) {
-    addToHistoryDisplay(history[i]);
-  }
+  history.forEach((item) => addToHistoryDisplay(item)); // Добавляем в DOM сверху вниз
 }
 
 // Load history on page load
@@ -30,13 +22,6 @@ toggleHistoryButton.addEventListener("click", () => {
   toggleHistoryButton.textContent = isHidden ? "Hide History" : "Show History";
 });
 
-// Example function to add a new calculation to history
-function addCalculationToHistory(calculation) {
-  const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
-  history.push(calculation);
-  localStorage.setItem("calcHistory", JSON.stringify(history));
-  addToHistoryDisplay(calculation);
-}
 
 // Calculator logic
 const calculate = (btnValue) => {
@@ -72,23 +57,81 @@ buttons.forEach((button) => {
   });
 });
 
-// Save calculation to history
+// Save calculation to history with a unique ID
 function addToHistory(example) {
   const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
-  history.push(example);
+  
+  // Создаём уникальный идентификатор для каждого вычисления
+  const uniqueId = new Date().getTime();  // Используем временную метку как уникальный идентификатор
+  
+  // Добавляем вычисление с уникальным ID
+  history.push({ id: uniqueId, calculation: example });
+  
   localStorage.setItem("calcHistory", JSON.stringify(history));
-  addToHistoryDisplay(example);
-};
-
-// Add a new history item to the display
-function addToHistoryDisplay(item) {
-  const historyItem = document.createElement("div");
-  historyItem.textContent = item;
-  historyRecords.prepend(historyItem); // Prepend the new item to the top
+  addToHistoryDisplay(example, uniqueId);
 }
 
-// function addDeleteHistoryButton() {
-//   const delHistButton = document.createElement("button");
-//   delHistButton.textContent = "Delete history";
+// Add a new history item to the display with unique ID
+function addToHistoryDisplay(item, uniqueId) {
+  const historyItem = document.createElement("div");
+  historyItem.classList.add("history-item");
 
-// }
+  // Создаём текст с вычислением
+  const itemText = document.createElement("span");
+  itemText.textContent = item;
+  historyItem.appendChild(itemText);
+
+  // Создаём кнопку "X" для удаления
+  const deleteButton = document.createElement("button");
+  deleteButton.textContent = "X";
+  deleteButton.classList.add("delete-button");
+
+  // Добавляем обработчик события на кнопку "X"
+  deleteButton.addEventListener("click", () => {
+    removeHistoryItem(uniqueId); // Удаляем элемент при клике с использованием уникального ID
+  });
+
+  historyItem.appendChild(deleteButton); // Добавляем кнопку в элемент
+  historyRecords.prepend(historyItem);  // Добавляем элемент в начало списка
+}
+
+// Удаляем историю из localStorage и DOM
+function clearHistory() {
+  localStorage.removeItem("calcHistory"); // Удаляем запись из localStorage
+  historyRecords.innerHTML = ""; // Очищаем блок истории в DOM
+}
+
+// Добавляем обработчик для кнопки "Delete history"
+document.querySelector(".delete-history").addEventListener("click", clearHistory);
+
+// Remove history item from localStorage and DOM by unique ID
+function removeHistoryItem(uniqueId) {
+  // Получаем текущую историю из localStorage
+  const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
+
+  // Удаляем элемент из массива по уникальному ID
+  const updatedHistory = history.filter(item => item.id !== uniqueId);
+
+  // Сохраняем обновлённую историю в localStorage
+  localStorage.setItem("calcHistory", JSON.stringify(updatedHistory));
+
+  // Перезагружаем историю на экран
+  reloadHistory();
+}
+
+// Reload the history from localStorage and display it
+function reloadHistory() {
+  // Очищаем текущие записи в DOM
+  historyRecords.innerHTML = "";
+
+  // Загружаем историю из localStorage
+  const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
+
+  // Добавляем каждое вычисление с кнопкой удаления
+  history.forEach(item => {
+    addToHistoryDisplay(item.calculation, item.id);
+  });
+}
+
+// Load history on page load
+document.addEventListener("DOMContentLoaded", reloadHistory);
