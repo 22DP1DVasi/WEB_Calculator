@@ -6,15 +6,6 @@ const toggleHistoryButton = document.getElementById("toggle-history");
 const specialChars = ["%", "*", "/", "-", "+", "="];
 let output = "";
 
-// Load history from localStorage
-function loadHistory() {
-  const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
-  history.forEach((item) => addToHistoryDisplay(item)); // Добавляем в DOM сверху вниз
-}
-
-// Load history on page load
-document.addEventListener("DOMContentLoaded", loadHistory);
-
 // Show/Hide history functionality
 toggleHistoryButton.addEventListener("click", () => {
   const isHidden = historyField.style.display === "none";
@@ -61,10 +52,10 @@ buttons.forEach((button) => {
 function addToHistory(example) {
   const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
   
-  // Создаём уникальный идентификатор для каждого вычисления
-  const uniqueId = new Date().getTime();  // Используем временную метку как уникальный идентификатор
+  // Create unique ID for each calculation
+  const uniqueId = new Date().getTime();  // Use time mark as unique ID
   
-  // Добавляем вычисление с уникальным ID
+  // Add calculation with ID
   history.push({ id: uniqueId, calculation: example });
   
   localStorage.setItem("calcHistory", JSON.stringify(history));
@@ -76,58 +67,52 @@ function addToHistoryDisplay(item, uniqueId) {
   const historyItem = document.createElement("div");
   historyItem.classList.add("history-item");
 
-  // Создаём текст с вычислением
+  // Create text element with calculation
   const itemText = document.createElement("span");
   itemText.textContent = item;
   historyItem.appendChild(itemText);
 
-  // Создаём кнопку "X" для удаления
+  // Create X button to delete
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "X";
   deleteButton.classList.add("delete-button");
 
-  // Добавляем обработчик события на кнопку "X"
+  // Create handler for X buttons
   deleteButton.addEventListener("click", () => {
-    removeHistoryItem(uniqueId); // Удаляем элемент при клике с использованием уникального ID
+    removeHistoryItem(uniqueId); // Delete element after click using unique ID
   });
 
-  historyItem.appendChild(deleteButton); // Добавляем кнопку в элемент
-  historyRecords.prepend(historyItem);  // Добавляем элемент в начало списка
+  historyItem.appendChild(deleteButton); // Add delete button to the element
+  historyRecords.prepend(historyItem);  // Add the element to the beginning of the list
 }
 
-// Удаляем историю из localStorage и DOM
+// Delete all history from localStorage and DOM
 function clearHistory() {
-  localStorage.removeItem("calcHistory"); // Удаляем запись из localStorage
-  historyRecords.innerHTML = ""; // Очищаем блок истории в DOM
+  localStorage.removeItem("calcHistory");
+  historyRecords.innerHTML = "";
 }
 
-// Добавляем обработчик для кнопки "Delete history"
+// Handler for Delete history button
 document.querySelector(".delete-history").addEventListener("click", clearHistory);
 
 // Remove history item from localStorage and DOM by unique ID
 function removeHistoryItem(uniqueId) {
-  // Получаем текущую историю из localStorage
   const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
-
-  // Удаляем элемент из массива по уникальному ID
+  // Delete the element from array by ID
   const updatedHistory = history.filter(item => item.id !== uniqueId);
 
-  // Сохраняем обновлённую историю в localStorage
   localStorage.setItem("calcHistory", JSON.stringify(updatedHistory));
-
-  // Перезагружаем историю на экран
   reloadHistory();
 }
 
 // Reload the history from localStorage and display it
 function reloadHistory() {
-  // Очищаем текущие записи в DOM
+  // Clear all text in DOM
   historyRecords.innerHTML = "";
 
-  // Загружаем историю из localStorage
   const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
 
-  // Добавляем каждое вычисление с кнопкой удаления
+  // Add every calculation
   history.forEach(item => {
     addToHistoryDisplay(item.calculation, item.id);
   });
