@@ -85,20 +85,35 @@ body {
   margin-top: 10px;
 }
 
+.toggle-history:hover {
+  background-color: #143e97;
+}
+
 /* History Field Styles */
 .history_field {
   flex: 1; /* Flexible sizing for large screens */
-  max-width: 400px; /* Same width as the calculator */
+  max-width: 390px; /* Same width as the calculator */
   display: flex;
   flex-direction: column;
   height: auto;
+  width: 100%;
 }
 
 .hist_records {
   flex: 1;
   overflow-y: auto;
-  max-height: 200px;
   color: white;
+  height: 100%;
+  max-height: 517px;
+  max-width: 390px;
+  background-color: rgb(5, 6, 7);
+}
+
+.history-item {
+  padding: 10px;
+  border-bottom: 1px solid #002741;
+  display: flex;
+  justify-content: space-between; 
 }
 
 .delete-history {
@@ -108,6 +123,24 @@ body {
   background-color: #0a324d;
   color: rgb(255, 255, 255);
   cursor: pointer;
+}
+
+.delete-history:hover {
+  background-color: #143e97;
+}
+
+.delete-button {
+  background-color: #11244d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 3px 8px;
+  margin-left: 5px;
+}
+
+.delete-button:hover {
+  background-color: #143e97;
 }
 
 /* Responsive Styles */
@@ -120,15 +153,40 @@ body {
   .history_field {
     height: auto; /* Match calculator height dynamically */
     max-height: none;
+    position: absolute;
+    left: 65%;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1310px) {
   .layout-container {
     flex-direction: column; /* Stack elements vertically */
+    align-items: center;
   }
 
   .history_field {
     width: 100%;
+    position: static;
   }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(70, 78, 105); 
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(90, 96, 117);
 }
